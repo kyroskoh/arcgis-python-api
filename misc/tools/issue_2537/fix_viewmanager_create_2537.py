@@ -12,7 +12,7 @@ Confirmed still present in arcgis 2.4.2 and 2.4.3:
 
 Usage (from this repo layout)::
 
-    from misc.tools.fix_viewmanager_create_2537 import apply
+    from misc.tools.issue_2537 import apply
     apply()
     # then use item.view_manager.create(...) as usual
 

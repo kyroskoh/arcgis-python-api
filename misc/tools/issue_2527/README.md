@@ -100,9 +100,29 @@ ok = ds.update(pro2)  # Server /edit, or Portal fallback + refresh_server
 | `apply(gis)` / `unapply()` | Patch / restore `Datastore.update` |
 | `find_portal_datastore_item(gis, path)` | Resolve Portal item by datastore `path` |
 
+## When Esri releases a fix
+
+Once a fixed ArcGIS API for Python build (or first-class Portal update-password API) ships and you have upgraded:
+
+1. **Restore the stock `Datastore.update`** in any long-running process that called `apply()`:
+
+   ```python
+   from misc.tools.issue_2527 import unapply
+
+   unapply()  # returns True if the monkey-patch was removed
+   ```
+
+2. **Stop importing / calling this workaround** — remove `apply(...)`, `update_password(...)`, and any `from misc.tools.issue_2527 import ...` lines from your scripts.
+
+3. **Switch to Esri’s supported path** — use the fixed API / updated KB steps for Portal-managed datastore password changes (or the Portal UI **Update Password** flow).
+
+4. **Optional cleanup** — delete the local `misc/tools/issue_2527/` copy (or stop checking out this fork branch) so the hotfix cannot be reapplied by mistake.
+
+Until then, keep the workaround only in environments that still hit #2527.
+
 ## Limits
 
-- Not a permanent Esri API fix — remove when a first-class update-password API ships.
+- Not a permanent Esri API fix — follow **When Esri releases a fix** above when an official path ships.
 - Portal UI validation may differ from the public REST `validate` operation.
 - Needs a reachable updated `.sde` (or encrypted `connectionString`) and rights to update the item / refresh servers.
 - `find_portal_datastore_item` searches Data Store items the signed-in user can see; pass the item explicitly to `update_password` when search cannot resolve a unique match.

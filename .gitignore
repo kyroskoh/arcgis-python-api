@@ -3,3 +3,5 @@ guide/gis module/.ipynb_checkpoints/class gis.ContentManager-checkpoint.ipynb
 .idea/
 .DS_Store
 pixi.lock
+*.pyc
+*.pyc

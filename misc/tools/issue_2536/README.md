@@ -65,6 +65,32 @@ copied_item = item.copy_feature_layer_collection(
 | `apply()` | Patch `Item.copy_feature_layer_collection` |
 | `restore()` | Restore the original `copy_feature_layer_collection` |
 
+## Smoke test
+
+### Mock (no AGOL credentials)
+
+Confirms the monkeypatch strips relationships on the first `add_to_definition`, re-adds them on the second pass, and returns a copied item:
+
+```bash
+python -m misc.tools.issue_2536.smoke_test
+# or
+python misc/tools/issue_2536/smoke_test.py
+```
+
+Expect: `PASS: mock smoke — relationships stripped then re-added; copy succeeded`
+
+### Live AGOL / Portal
+
+Uses a Feature Service that has layer/table relationships (the #2536 repro case):
+
+```bash
+python misc/tools/issue_2536/smoke_test.py --item-id YOUR_FS_ITEM_ID
+python misc/tools/issue_2536/smoke_test.py --item-id YOUR_FS_ITEM_ID --profile your_profile
+python misc/tools/issue_2536/smoke_test.py --item-id YOUR_FS_ITEM_ID --keep
+```
+
+The live run applies the patch, copies the service shell, checks that relationships exist on the copy, then deletes the copied item unless `--keep` is set.
+
 ## When Esri releases a fix
 
 Once a fixed ArcGIS API for Python build ships and you have upgraded:
@@ -100,7 +126,7 @@ Until then, keep the workaround only in environments that still hit #2536.
 - Not a permanent Esri API fix — follow **When Esri releases a fix** above when an official path ships.
 - Copies the service **shell** (schema), same as stock `copy_feature_layer_collection` — it does not deep-copy feature data.
 - Relationships that point at layers/tables you excluded from `layers` / `tables` are dropped on the second pass.
-- No live AGOL integration tests ship with this folder; validate against a non-production Feature Service first.
+- Mock smoke covers the relationship strip/re-add path locally; live AGOL/Portal validation still needs a Feature Service with relationships (see **Smoke test**).
 
 ## References
 

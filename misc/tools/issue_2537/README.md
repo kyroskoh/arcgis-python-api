@@ -26,6 +26,20 @@ Or copy `fix_viewmanager_create_2537.py` next to your script and import it direc
 
 Requires ArcGIS API for Python (confirmed broken on 2.4.2 and 2.4.3).
 
+## Tests (mock / smoke)
+
+No live ArcGIS Online or Enterprise required:
+
+```bash
+python -m unittest misc.tools.issue_2537.test_fix_viewmanager_create_2537 -v
+```
+
+Or:
+
+```bash
+python misc/tools/issue_2537/test_fix_viewmanager_create_2537.py
+```
+
 ## Preferred API: `apply()` / `unapply()`
 
 Monkey-patches `FeatureLayerCollectionManager.create_view` (what `ViewManager.create` calls):
@@ -91,7 +105,7 @@ Until then, keep the workaround only in environments that still hit #2537.
 ## Limits
 
 - Not a permanent Esri API fix — follow **When Esri releases a fix** above when an official path ships.
-- No live AGOL integration tests ship with this folder; validate against a non-production multi-layer hosted feature service first.
+- Mock / smoke tests cover the monkey-patch without a live org; still validate against a non-production multi-layer hosted feature service before production use.
 - Already-corrupted parent items are not repaired by this patch — restore them from backup or republish before creating more views.
 
 ## References

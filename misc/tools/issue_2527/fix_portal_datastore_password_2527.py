@@ -128,6 +128,9 @@ def _resolve_item(gis, item):
         if resolved is None:
             raise ValueError(f"No Portal item found for id={item!r}")
         return resolved
+    # Duck-typed Item-like objects (tests / wrappers with id + get_data + update).
+    if all(hasattr(item, name) for name in ("id", "get_data", "update")):
+        return item
     raise TypeError("item must be a Portal Item or item id string")
 
 

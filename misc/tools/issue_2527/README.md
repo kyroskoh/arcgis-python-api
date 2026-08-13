@@ -29,6 +29,20 @@ Or copy `fix_portal_datastore_password_2527.py` next to your script and import i
 
 Requires ArcGIS API for Python (tested against 2.4.3) and item-owner or admin privileges.
 
+## Tests (mock / smoke)
+
+No live Portal or Server required:
+
+```bash
+python -m unittest misc.tools.issue_2527.test_fix_portal_datastore_password_2527 -v
+```
+
+Or:
+
+```bash
+python misc/tools/issue_2527/test_fix_portal_datastore_password_2527.py
+```
+
 ## Preferred API: `update_password`
 
 ```python
